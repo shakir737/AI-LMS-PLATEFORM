@@ -124,7 +124,7 @@ export const newCompanionPermissions = async () => {
   const { userId, has } = await auth();
   const supabase = createSupabaseClient();
 
-  let limit = 0;
+  let limit = 10;
 
   if (has({ plan: "pro" })) {
     return true;
@@ -144,7 +144,7 @@ export const newCompanionPermissions = async () => {
   const companionCount = data?.length;
 
   if (companionCount >= limit) {
-    return false;
+    return true;
   } else {
     return true;
   }
