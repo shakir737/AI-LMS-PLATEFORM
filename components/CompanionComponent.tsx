@@ -6,7 +6,7 @@ import {vapi} from "@/lib/vapi.sdk";
 import Image from "next/image";
 import Lottie, {LottieRefCurrentProps} from "lottie-react";
 import soundwaves from '@/constants/soundwaves.json'
-import {addToSessionHistory} from "@/lib/actions/companion.actions";
+
 
 enum CallStatus {
     INACTIVE = 'INACTIVE',
@@ -37,7 +37,7 @@ const CompanionComponent = ({ companionId, subCategory, name, userName, userImag
 
         const onCallEnd = () => {
             setCallStatus(CallStatus.FINISHED);
-            addToSessionHistory(companionId)
+      
         }
 
         const onMessage = (message: Message) => {
@@ -79,7 +79,7 @@ const CompanionComponent = ({ companionId, subCategory, name, userName, userImag
         setCallStatus(CallStatus.CONNECTING)
 
         const assistantOverrides = {
-            variableValues: { subCategory,topic, style },
+            variableValues: { subCategory, topic, style },
             clientMessages: ["transcript"],
             serverMessages: [],
         }
