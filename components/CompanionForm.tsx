@@ -23,16 +23,19 @@ import {
 } from "@/components/ui/select"
 import {subjects} from "@/constants";
 import {Textarea} from "@/components/ui/textarea";
-import {createCompanion} from "@/lib/actions/companion.actions";
-import {redirect} from "next/navigation";
+// import {redirect} from "next/navigation";
 
 const formSchema = z.object({
     name: z.string().min(1, { message: 'Companion is required.'}),
-    subject: z.string().min(1, { message: 'Subject is required.'}),
-    topic: z.string().min(1, { message: 'Topic is required.'}),
+    courseCategory: z.string().min(1, { message: 'Category is required.'}),
+    subCategory: z.string().min(1, { message: 'Sub Category is required.'}),
     voice: z.string().min(1, { message: 'Voice is required.'}),
     style: z.string().min(1, { message: 'Style is required.'}),
     duration: z.coerce.number().min(1, { message: 'Duration is required.'}),
+    level: z.string().min(1,{ message: "Level is required"}),
+    courseCategoryType: z.string().min(1, { message: "course Category Type is required"}),
+    chapter: z.coerce.number().min(1, {message: "chapter is required"}),
+
 })
 
 const CompanionForm = () => {
@@ -40,23 +43,46 @@ const CompanionForm = () => {
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: '',
-            subject: '',
-            topic: '',
+            courseCategory: '',
+            subCategory: '',
             voice: '',
             style: '',
-            duration: 15,
+            duration: 0,
+            level: '',
+            courseCategoryType: '',
+            chapter: 0,
+
         },
     })
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        const companion = await createCompanion(values);
-
-        if(companion) {
-            redirect(`/companions/${companion.id}`);
-        } else {
-            console.log('Failed to create a companion');
-            redirect('/');
-        }
+        try {
+      const response = await fetch('/api/vapi/generate',{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values),
+}); // Assuming you have an API route at /pages/api/hello.js or /app/api/hello/route.js
+    //   if (!response.ok) {
+    //     throw new Error(`HTTP error! status: ${response.status}`);
+    //   }
+      const result = await response.json();
+      
+    } catch (error: any) {
+      
+    } finally {
+     
+    }
+        //  const companion = await createCompanion(values);
+        
+        //  console.log(companion);
+        //  if(companion) {
+        //  redirect(`/companions/${companion[0].id}`);
+        // } else {
+        //   console.log('Failed to create a companion');
+        //   redirect('/');
+        // }
     }
 
     return (
@@ -67,7 +93,7 @@ const CompanionForm = () => {
                     name="name"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Companion name</FormLabel>
+                            <FormLabel>User Name</FormLabel>
                             <FormControl>
                                 <Input
                                     placeholder="Enter the companion name"
@@ -81,10 +107,10 @@ const CompanionForm = () => {
                 />
                 <FormField
                     control={form.control}
-                    name="subject"
+                    name="courseCategory"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Subject</FormLabel>
+                            <FormLabel>Main Category OF Course</FormLabel>
                             <FormControl>
                                 <Select
                                     onValueChange={field.onChange}
@@ -113,10 +139,10 @@ const CompanionForm = () => {
                 />
                 <FormField
                     control={form.control}
-                    name="topic"
+                    name="subCategory"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>What should the companion help with?</FormLabel>
+                            <FormLabel>What Should You Want To Learn</FormLabel>
                             <FormControl>
                                 <Textarea
                                     placeholder="Ex. Derivates & Integrals"
@@ -160,6 +186,72 @@ const CompanionForm = () => {
                         </FormItem>
                     )}
                 />
+                  <FormField
+                    control={form.control}
+                    name="level"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Course Level</FormLabel>
+                            <FormControl>
+                                <Select
+                                    onValueChange={field.onChange}
+                                    value={field.value}
+                                    defaultValue={field.value}
+                                >
+                                    <SelectTrigger className="input">
+                                        <SelectValue
+                                            placeholder="Select the voice"
+                                        />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="Intermediate">
+                                            Intermediate
+                                        </SelectItem>
+                                        <SelectItem value="Experience">
+                                            Experience
+                                        </SelectItem>
+                                          <SelectItem value="Professional">
+                                            Professional
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                 <FormField
+                    control={form.control}
+                    name="courseCategoryType"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Technical Or Behavioural</FormLabel>
+                            <FormControl>
+                                <Select
+                                    onValueChange={field.onChange}
+                                    value={field.value}
+                                    defaultValue={field.value}
+                                >
+                                    <SelectTrigger className="input">
+                                        <SelectValue
+                                            placeholder="Select the Course Category Type"
+                                        />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="Technical">
+                                            Technical
+                                        </SelectItem>
+                                        <SelectItem value="Behavioural">
+                                            Behavioural
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
                 <FormField
                     control={form.control}
                     name="style"
@@ -197,11 +289,11 @@ const CompanionForm = () => {
                     name="duration"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Estimated session duration in minutes</FormLabel>
+                            <FormLabel>Estimated Course Duration In Hours</FormLabel>
                             <FormControl>
                                 <Input
                                     type="number"
-                                    placeholder="15"
+                                    placeholder="1"
                                     {...field}
                                     className="input"
                                 />
@@ -210,7 +302,25 @@ const CompanionForm = () => {
                         </FormItem>
                     )}
                 />
-                <Button type="submit" className="w-full cursor-pointer">Build Your Companion</Button>
+                <FormField
+                    control={form.control}
+                    name="chapter"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>How Maney Chapters You Want In Course</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="number"
+                                    placeholder="1"
+                                    {...field}
+                                    className="input"
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <Button type="submit" className="w-full cursor-pointer">Build Your Course</Button>
             </form>
         </Form>
     )
