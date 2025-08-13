@@ -15,12 +15,11 @@ enum CallStatus {
     FINISHED = 'FINISHED',
 }
 
-const CompanionComponent = ({ companionId, subject, topic, name, userName, userImage, style, voice }: CompanionComponentProps) => {
+const CompanionComponent = ({ companionId, subCategory, name, userName, userImage, style, voice, topic, topicDuration}: CompanionComponentProps) => {
     const [callStatus, setCallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
     const [isSpeaking, setIsSpeaking] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
     const [messages, setMessages] = useState<SavedMessage[]>([]);
-
     const lottieRef = useRef<LottieRefCurrentProps>(null);
 
     useEffect(() => {
@@ -80,7 +79,7 @@ const CompanionComponent = ({ companionId, subject, topic, name, userName, userI
         setCallStatus(CallStatus.CONNECTING)
 
         const assistantOverrides = {
-            variableValues: { subject, topic, style },
+            variableValues: { subCategory,topic, style },
             clientMessages: ["transcript"],
             serverMessages: [],
         }
@@ -98,14 +97,14 @@ const CompanionComponent = ({ companionId, subject, topic, name, userName, userI
         <section className="flex flex-col h-[70vh]">
             <section className="flex gap-8 max-sm:flex-col">
                 <div className="companion-section">
-                    <div className="companion-avatar" style={{ backgroundColor: getSubjectColor(subject)}}>
+                    <div className="companion-avatar" style={{ backgroundColor: getSubjectColor(subCategory)}}>
                         <div
                             className={
                             cn(
                                 'absolute transition-opacity duration-1000', callStatus === CallStatus.FINISHED || callStatus === CallStatus.INACTIVE ? 'opacity-1001' : 'opacity-0', callStatus === CallStatus.CONNECTING && 'opacity-100 animate-pulse'
                             )
                         }>
-                            <Image src={`/icons/${subject}.svg`} alt={subject} width={150} height={150} className="max-sm:w-fit" />
+                            {/* <Image src={`/icons/${subCategory}.svg`} alt={subCategory} width={150} height={150} className="max-sm:w-fit" /> */}
                         </div>
 
                         <div className={cn('absolute transition-opacity duration-1000', callStatus === CallStatus.ACTIVE ? 'opacity-100': 'opacity-0')}>

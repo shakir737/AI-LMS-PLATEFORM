@@ -28,11 +28,14 @@ type Companion = Models.DocumentList<Models.Document> & {
 
 interface CreateCompanion {
   name: string;
-  subject: string;
-  topic: string;
+  courseCategory: string;
+  subCategory: string;
   voice: string;
   style: string;
   duration: number;
+  level: string;
+  subCategoryType: string;
+  chapter: number;
 }
 
 interface GetAllCompanions {
@@ -72,11 +75,12 @@ interface SavedMessage {
 
 interface CompanionComponentProps {
   companionId: string;
-  subject: string;
+  subCategory: string;
   topic: string;
   name: string;
   userName: string;
   userImage: string;
   voice: string;
   style: string;
+  topicDuration: number;
 }
