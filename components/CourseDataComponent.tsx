@@ -24,7 +24,7 @@ const CourseData = ({
     const currentParams = new URLSearchParams(searchParams.toString());
     const total = chapter * 4;
     const duration = courseDuration * 60 / total;
-    const contentReplaced = content.replace(".","");
+    const contentReplaced = content.replace('.',"");
     currentParams.set("topic", `${contentReplaced} in ${subCategory}`);
     currentParams.set("duration", (duration).toString());
     router.push(`/companions/${id}?${currentParams.toString()}`);
