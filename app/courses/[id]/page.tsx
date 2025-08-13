@@ -15,9 +15,9 @@ const Course = async ({ params }: CompanionSessionPageProps) => {
     const user = await currentUser();
 
     const { name, courseCategory, subCategory, duration, courseData, chapter } = companion;
-    let chapters = []
+    let chapters = [];
     chapters= courseData.Chapters;
-    
+    console.log(courseData);
     if(!user) redirect('/sign-in');
     if(!name) redirect('/companions');
 
@@ -61,7 +61,7 @@ const Course = async ({ params }: CompanionSessionPageProps) => {
                     <div className="text-xl ">{courseData.Description}</div>
                  <div className="flex justify-center items-center font-bold text-3xl"> Course Detail</div>
                         
-                  <CourseData id={id} chapters={chapters} chapter={chapter} subCategory={subCategory} courseDuration={duration} />
+                   <CourseData id={id} chapters={chapters} chapter={chapter} subCategory={subCategory} courseDuration={duration} />
                            
                  </div>
 

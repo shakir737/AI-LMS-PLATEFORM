@@ -3,7 +3,9 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 interface CompanionCardProps {
   id: string;
-  chapters: [];
+  chapters: [
+    Content: []
+  ];
   chapter: number;
   subCategory: string;
   courseDuration: number;
@@ -19,13 +21,13 @@ const CourseData = ({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
+  
   const updateSearchParams = (content:any, courseDuration: any, chapter: any) => {
     const currentParams = new URLSearchParams(searchParams.toString());
     const total = chapter * 4;
     const duration = courseDuration * 60 / total;
-    const contentReplaced = content.replace('.',"");
-    currentParams.set("topic", `${contentReplaced} in ${subCategory}`);
+    // const contentReplaced = content.replace('.',"");
+    currentParams.set("topic", content);
     currentParams.set("duration", (duration).toString());
     router.push(`/companions/${id}?${currentParams.toString()}`);
   };

@@ -24,7 +24,7 @@ export async function POST(request: Request) {
         The questions are going to be read by a voice assistant so do not use "/" , "*", backtick or any other
         special characters which might break the voice assistant.
         Return the course formatted like this in a json format:
-        {"Description",{"chapter 1"}, {"chapter 2"}, {"chapter 3"}}
+        {"Description",[{Title},{Duration},{Content:[]}], [{Title},{Duration},{Content: []}], [{Title},{Duration},{Content:[]}]}
         Thank you! <3
     `,
     });
